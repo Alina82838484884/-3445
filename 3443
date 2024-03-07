@@ -1,42 +1,60 @@
-Console.Write(«Введите количество элементов массива: «);
-int m = Convert.ToInt32(Console.ReadLine());
-string [] stringArray = new string [m];
-void array(string [] stringArray)
+﻿string[] workArray = FillArray();
+string[] resultArray = GenerateNewArray(workArray);
+string firstArray = PrintArray(workArray);
+string secondArray = PrintArray(resultArray);
+Console.WriteLine(firstArray + " -> " + secondArray);
+
+string[] FillArray()
 {
-  for (int i = 0;i<stringArray.Length;i++)
-  {
-     Console.WriteLine($»Введите {i+1} элемент массива»);
-     stringArray[i] = Console.ReadLine();
-  }
+    Console.WriteLine("Введите данные через пробел, по окончании ввода нажмите Enter: ");
+    string? enterSymbols = Console.ReadLine();
+    if (enterSymbols == null) { enterSymbols = ""; };
+    char[] separators = new char[] { ',', ' ' };
+    string[] workArray = enterSymbols.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+    return workArray;
 }
-string [] symbol(string [] stringArray)
+
+string PrintArray(string[] workArray)
 {
-  int n = 0;
-  for (int i = 0;i<stringArray.Length;i++)
-  {
-    if(stringArray[i].Length <=3)
-    n++;
-  }
-  string [] rez = new string [n];
-  int j = 0;
-  for (int i = 0;i<stringArray.Length;i++)
-  {
-    if(stringArray[i].Length <=3)
+    string stringArray = "[";
+    for (int i = 0; i < workArray.Length; i++)
     {
-        rez[j] = stringArray[i];
-        j++;
+        if (i == workArray.Length - 1)
+        {
+            stringArray += $"\"{workArray[i]}\"";
+            break;
+        }
+        stringArray += ($"\"{workArray[i]}\", ");
     }
-  }
-  return rez;
+    stringArray += "]";
+    return stringArray;
 }
-void printA(string [] stringArray)
+
+int CountStringSymbols(string[] workArray)
 {
-    Console.Write(«[«);
-    for (int i = 0;i<stringArray.Length;i++)
+    int counter = 0;
+    foreach (string item in workArray)
     {
-    Console.Write($»‘{stringArray[i]}’, «);
+        if (item.Length <= 3)
+        {
+            counter++;
+        }
     }
-    Console.Write(«]»);
+    return counter;
 }
-array(stringArray);
-printA(symbol(stringArray));
+
+string[] GenerateNewArray(string[] workArray)
+{
+    int resultArrayLength = CountStringSymbols(workArray);
+    string[] resultArray = new string[resultArrayLength];
+    int i = 0;
+    foreach (string item in workArray)
+    {
+        if (item.Length <= 3)
+        {
+            resultArray[i] = item;
+            i++;
+        }
+    }
+    return resultArray;
+}
